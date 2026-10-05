@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>購入者特典 | brain_bonus-portal</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; margin: 0; background: #f6f7f9; color: #1c1e21; }
+  header { background: #fff; border-bottom: 1px solid #e2e4e8; padding: 24px 16px 16px; text-align: center; }
+  header h1 { font-size: 20px; margin: 0 0 8px; }
+  header p { font-size: 13px; color: #5a6068; margin: 0; }
+  main { max-width: 720px; margin: 24px auto; padding: 0 16px; }
+  section.sku { background: #fff; border: 1px solid #e2e4e8; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+  section.sku h2 { font-size: 16px; margin: 0 0 4px; }
+  section.sku .slug { font-size: 12px; color: #8a9099; font-family: monospace; }
+  .gate { display: flex; gap: 8px; margin-top: 14px; }
+  .gate input { flex: 1; padding: 9px 12px; border: 1px solid #c8ccd2; border-radius: 8px; font-size: 14px; }
+  .gate button { padding: 9px 18px; border: 0; border-radius: 8px; background: #2563eb; color: #fff; font-size: 14px; cursor: pointer; }
+  .gate button:hover { background: #1d4fd8; }
+  .msg { font-size: 13px; margin-top: 8px; color: #b4231f; }
+  .msg.ok { color: #1a7f37; }
+  ul.items { margin: 14px 0 0; padding: 0; list-style: none; }
+  ul.items li { padding: 10px 12px; border-top: 1px solid #eef0f2; font-size: 14px; display: flex; justify-content: space-between; gap: 12px; }
+  ul.items li .name { font-weight: 600; }
+  ul.items li .desc { color: #5a6068; font-weight: 400; }
+  ul.items li a { color: #2563eb; text-decoration: none; white-space: nowrap; }
+  ul.items li a:hover { text-decoration: underline; }
+  .pending { color: #8a9099; font-size: 12px; white-space: nowrap; }
+  footer { text-align: center; font-size: 12px; color: #8a9099; padding: 16px; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>購入者特典</h1>
+  <p>Brainでご購入いただいた商品の特典を受け取れるページです。キーは商品に添付の「特典受取案内」に記載されています。</p>
+</header>
+<main id="app"></main>
+<footer>本ページは Brain 販売商品の購入者向け特典配布用です。キーがわからない場合はお買い上げ商品の添付ファイルをご確認ください。</footer>
+<script>
+const SKUS = [
+  {
+    id: "012-hire-today",
+    title: "SKU 012 hire-today",
+    keyHash: "83c4deddbd99da0499332b8cd06f8dcc53780acc9c419939a042800976adda78",
+    items: [
+      { name: "導入ガイド", desc: "購入後の進め方", status: "準備中" },
+      { name: "更新情報", desc: "改訂・追加素材のお知らせ", status: "準備中" }
+    ]
+  }
+];
+
+async function sha256hex(text) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+function itemRow(it) {
+  const name = `<span><span class="name">${it.name}</span> <span class="desc">— ${it.desc}</span></span>`;
+  if (it.status === "準備中") return `<li>${name}<span class="pending">準備中</span></li>`;
+  return `<li>${name}<a href="${it.url}" download>ダウンロード</a></li>`;
+}
+
+function render() {
+  document.getElementById("app").innerHTML = SKUS.map((s, i) => `
+    <section class="sku" id="sku-${i}">
+      <h2>${s.title}</h2><span class="slug">${s.id}</span>
+      <div class="gate">
+        <input type="text" placeholder="特典キーを入力" aria-label="特典キー">
+        <button type="button">解錠</button>
+      </div>
+      <p class="msg" hidden></p>
+      <ul class="items hidden">${s.items.map(itemRow).join("")}</ul>
+    </section>`).join("");
+
+  SKUS.forEach((s, i) => {
+    const sec = document.getElementById(`sku-${i}`);
+    const btn = sec.querySelector("button");
+    const act = async () => {
+      const msg = sec.querySelector(".msg");
+      const hex = await sha256hex(sec.querySelector("input").value.trim());
+      if (hex === s.keyHash) {
+        msg.textContent = "解錠しました。特典一覧を表示しています。";
+        msg.className = "msg ok";
+        sec.querySelector(".items").classList.remove("hidden");
+        sec.querySelector(".gate").classList.add("hidden");
+      } else {
+        msg.textContent = "キーが違います。商品の添付「特典受取案内」をご確認ください。";
+        msg.className = "msg";
+      }
+      msg.hidden = false;
+    };
+    btn.addEventListener("click", act);
+    sec.querySelector("input").addEventListener("keydown", e => { if (e.key === "Enter") act(); });
+  });
+}
+render();
+</script>
+</body>
+</html>
