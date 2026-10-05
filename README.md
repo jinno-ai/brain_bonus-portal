@@ -29,4 +29,5 @@ Brain 販売商品の**購入者特典配布ポータル**（静的・ビルド�
 
 ## 公開
 
-- GitHub Pages（main / root）: `https://jinno-ai.github.io/brain_bonus-portal/`
+- GitHub Pages（main / root）: `https://nobu007.github.io/brain_bonus-portal/`
+- リポ作成権限の関係で個人アカウント（nobu007）配下。jinno-ai org へ移す場合は GitHub の Transfer repository を使用（URLは自動でリダイレクトされる）
