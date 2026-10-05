@@ -44,17 +44,23 @@ const SKUS = [
   {
     id: "012-hire-today",
     title: "SKU 012 hire-today",
-    keyHash: "64af9870ee8c881f7e12f51cdb3d2741cdff7d2d9272ad593ae9ce26a941172f",
-    items: [
-      { name: "導入ガイド", desc: "購入後の進め方", status: "準備中" },
-      { name: "更新情報", desc: "改訂・追加素材のお知らせ", status: "準備中" }
-    ]
+    enc: {
+      salt: "chrdguM9fpz8glKsRArchw==",
+      iv: "oC22dkXLcFBwVQdX",
+      data: "WabWnaea0qV9BxE4aShEugIQT4NEYy3nStTnBRUUeXhBg3h0zEoKyenu7UqLHtKoqt1qq6XUQBfJST0wyzYlYQLDhFVERKDXsNofVTm8nBRzGU2kTRpdxNx4zrGshkjOB4f5uywRIc1agacQy+azMPUhP8wwEwoH1qfXL072BLpYNOLcYCNq8JQ7pAaBn+cfmaiFonRtmVNVnuCKClpUQf4jMHINSBx+XPgsyh918U0sfZsgOt4Vkz24RRrZx7XNS8mYT9Jz21zEhIVLXIm9EWI="
+    }
   }
 ];
 
-async function sha256hex(text) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
-  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+async function decryptItems(enc, key) {
+  const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+  const base = await crypto.subtle.importKey(
+    "raw", new TextEncoder().encode(key), "PBKDF2", false, ["deriveKey"]);
+  const aes = await crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt: b64(enc.salt), iterations: 120000, hash: "SHA-256" },
+    base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(enc.iv) }, aes, b64(enc.data));
+  return JSON.parse(new TextDecoder().decode(plain));
 }
 
 function itemRow(it) {
@@ -72,28 +78,32 @@ function render() {
         <button type="button">解錠</button>
       </div>
       <p class="msg" hidden></p>
-      <ul class="items hidden">${s.items.map(itemRow).join("")}</ul>
+      <ul class="items hidden"></ul>
     </section>`).join("");
 
   SKUS.forEach((s, i) => {
     const sec = document.getElementById(`sku-${i}`);
-    const btn = sec.querySelector("button");
+    const msg = sec.querySelector(".msg");
     const act = async () => {
-      const msg = sec.querySelector(".msg");
-      const hex = await sha256hex(sec.querySelector("input").value.trim());
-      if (hex === s.keyHash) {
-        msg.textContent = "解錠しました。特典一覧を表示しています。";
-        msg.className = "msg ok";
-        sec.querySelector(".items").classList.remove("hidden");
-        sec.querySelector(".gate").classList.add("hidden");
-      } else {
+      let items;
+      try {
+        items = await decryptItems(s.enc, sec.querySelector("input").value.trim());
+      } catch {
         msg.textContent = "キーが違います。商品の添付「特典受取案内」をご確認ください。";
         msg.className = "msg";
+        msg.hidden = false;
+        return;
       }
+      const ul = sec.querySelector(".items");
+      ul.innerHTML = items.map(itemRow).join("");
+      ul.classList.remove("hidden");
+      sec.querySelector(".gate").classList.add("hidden");
+      msg.textContent = "解錠しました。特典一覧を表示しています。";
+      msg.className = "msg ok";
       msg.hidden = false;
     };
-    btn.addEventListener("click", act);
-    sec.querySelector("input").addEventListener("keydown", e => { if (e.key === "Enter") act(); });
+    sec.querySelector("button").addEventListener("click", act);
+    sec.querySelector("input").addEventListener("keydown", (e) => { if (e.key === "Enter") act(); });
   });
 }
 render();
