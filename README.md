@@ -1,33 +1,29 @@
 # brain_bonus-portal
 
-Brain 販売商品の**購入者特典配布ポータル**（静的・ビルドなし・GitHub Pages）。
+購入者向け特典配布ページ（静的・ビルドなし・GitHub Pages・キー式）。
 
-- 設計の正本 = `business_notes/横断/2026-10-05-購入者特典配布口設計.md`（私有文書リポ・ここでは複製しない）
-- 特典素材の完成物の正本 = `brain_ops-content`（Linux 側）
-- 出品改訂（入口の添付差し替え）の画面操作 = `tas_nexus_cx_starter/docs/brain-ops/01-listing-runbook.md`
+公開リポには運用の文脈（プラットフォーム名・商品・販売情報）を書かない。設計・管轄・キーの正本は私有リポの設計文書を参照。
 
 ## 仕組み
 
-- `index.html` 内 `SKUS` 配列が商品ごとのセクション（タイトル・キーハッシュ・特典一覧）を持つ。
-- キー照合は SHA-256 ハッシュ比較（Web Crypto）。**平文キーは本リポに置かない**。キーの正本 = 設計正本の §キー台帳。
-- 特典の `status: "準備中"` はリンクなし表示。実配布時は `url` に置き換える。
+- `index.html` 内 `SKUS` 配列が商品ごとのセクション（表示名・キーハッシュ・特典一覧）を持つ。
+- キー照合は SHA-256 ハッシュ比較（Web Crypto）。**リポにはハッシュのみを置き、平文キーは置かない**。
+- `status: "準備中"` はリンクなし表示。実配布時は `url` 付きに差し替える。
 
-## 運用手順
+## 運用
 
 ### 特典を追加・差し替える
 
-1. `SKUS` の該当 SKU `items` を編集（準備中 → `url` 付き、または項目追加）。
-2. 配布ファイル本体は本リポに置かず外部URL（または `files/` 配下が必要な場合のみ同梱して相談）を指す。
-3. commit & push で即時反映（Brain 審査は不要）。
+1. `SKUS` の該当 `items` を編集して push（即時反映）。
+2. 配布ファイル・リンクは機密を含めない（キー式は完全秘匿ではなく速度壁。漏洩前提で機密を置かない）。
 
-### キーを交換する（漏洩時）
+### キーを交換する（漏洩時・定期）
 
-1. 新キーを生成: `echo -n "brain012-$(openssl rand -hex 6)"`（接頭辞 `brain<SKU番号>-`）。
-2. ハッシュを計算: `echo -n "<新キー>" | shasum -a 256`。
-3. ハッシュを `SKUS[].keyHash` に置き換えて push。
-4. 設計正本の §キー台帳を更新し、該当 SKU の添付「特典受取案内」を差し替え出品（tas_nexus_cx_starter runbook の手順）。
+1. 新キーは推測不可能なランダム値（例: `openssl rand -hex 24`）。接頭辞などの形式パターンを作らない。
+2. ハッシュ化: `printf %s "<新キー>" | shasum -a 256`
+3. `SKUS[].keyHash` を差し替えて push。
+4. 案内資料側のキー記載を更新（キーの正本は私有リポのキー台帳）。
 
 ## 公開
 
-- GitHub Pages（main / root）: `https://nobu007.github.io/brain_bonus-portal/`
-- リポ作成権限の関係で個人アカウント（nobu007）配下。jinno-ai org へ移す場合は GitHub の Transfer repository を使用（URLは自動でリダイレクトされる）
+- GitHub Pages（main / root）
