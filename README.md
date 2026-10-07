@@ -15,7 +15,7 @@
 ### 特典を追加・差し替える
 
 1. 平文一覧を編集（例: `items.012.json`。リポにコミットしない）。
-2. 暗号化: `node tools/encrypt.mjs items.012.json "<キー>"`
+2. 暗号化: `node tools/encrypt.mjs items.json --key-stdin < /path/to/private-key-file`（キーをコマンド引数へ渡さない）
 3. 出力の `salt` / `iv` / `data` を `SKUS[].enc` に差し替えて push（即時反映）。
 4. 配布ファイル・URL は機密を含めない。**URL は推測不能なランダム path で発行**する（URL 自体が第二の鍵）。
 5. 購入者が復号後に URL を共有する可能性は always ある（サーバ認証でも同様）。特典は非機密素材に限定する。

@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
-<title>購入者特典 | brain_bonus-portal</title>
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet">
+<title>購入者特典</title>
 <style>
   :root { color-scheme: light dark; }
   body { font-family: -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; margin: 0; background: #f6f7f9; color: #1c1e21; }
@@ -14,7 +15,6 @@
   main { max-width: 720px; margin: 24px auto; padding: 0 16px; }
   section.sku { background: #fff; border: 1px solid #e2e4e8; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
   section.sku h2 { font-size: 16px; margin: 0 0 4px; }
-  section.sku .slug { font-size: 12px; color: #8a9099; font-family: monospace; }
   .gate { display: flex; gap: 8px; margin-top: 14px; }
   .gate input { flex: 1; padding: 9px 12px; border: 1px solid #c8ccd2; border-radius: 8px; font-size: 14px; }
   .gate button { padding: 9px 18px; border: 0; border-radius: 8px; background: #2563eb; color: #fff; font-size: 14px; cursor: pointer; }
@@ -22,11 +22,15 @@
   .msg { font-size: 13px; margin-top: 8px; color: #b4231f; }
   .msg.ok { color: #1a7f37; }
   ul.items { margin: 14px 0 0; padding: 0; list-style: none; }
-  ul.items li { padding: 10px 12px; border-top: 1px solid #eef0f2; font-size: 14px; display: flex; justify-content: space-between; gap: 12px; }
+  ul.items li { padding: 10px 12px; border-top: 1px solid #eef0f2; font-size: 14px; }
+  .item-heading { display: flex; justify-content: space-between; gap: 12px; }
   ul.items li .name { font-weight: 600; }
   ul.items li .desc { color: #5a6068; font-weight: 400; }
   ul.items li a { color: #2563eb; text-decoration: none; white-space: nowrap; }
   ul.items li a:hover { text-decoration: underline; }
+  ul.items li details { margin-top: 8px; }
+  ul.items li summary { color: #2563eb; cursor: pointer; }
+  .content-body { margin-top: 8px; padding: 12px; border-radius: 8px; background: #f6f7f9; white-space: pre-wrap; line-height: 1.75; }
   .pending { color: #8a9099; font-size: 12px; white-space: nowrap; }
   footer { text-align: center; font-size: 12px; color: #8a9099; padding: 16px; }
   .hidden { display: none; }
@@ -35,19 +39,18 @@
 <body>
 <header>
   <h1>購入者特典</h1>
-  <p>Brainでご購入いただいた商品の特典を受け取れるページです。キーは商品に添付の「特典受取案内」に記載されています。</p>
+  <p>Brainでご購入いただいた商品の特典を受け取れるページです。キーはBrain記事の有料エリアにある受取案内をご確認ください。</p>
 </header>
 <main id="app"></main>
-<footer>本ページは Brain 販売商品の購入者向け特典配布用です。特典は購入者ご本人の利用に限ります（再配布・転載不可）。キーがわからない場合はお買い上げ商品の添付ファイルをご確認ください。</footer>
+<footer>本ページはBrain商品の購入者向けです。特典は購入者ご本人の利用に限ります（再配布・転載不可）。キーがわからない場合はBrain記事の有料エリアにある受取案内をご確認ください。</footer>
 <script>
 const SKUS = [
   {
-    id: "012-hire-today",
-    title: "SKU 012 hire-today",
+    title: "購入者向け特典",
     enc: {
-      salt: "chrdguM9fpz8glKsRArchw==",
-      iv: "oC22dkXLcFBwVQdX",
-      data: "WabWnaea0qV9BxE4aShEugIQT4NEYy3nStTnBRUUeXhBg3h0zEoKyenu7UqLHtKoqt1qq6XUQBfJST0wyzYlYQLDhFVERKDXsNofVTm8nBRzGU2kTRpdxNx4zrGshkjOB4f5uywRIc1agacQy+azMPUhP8wwEwoH1qfXL072BLpYNOLcYCNq8JQ7pAaBn+cfmaiFonRtmVNVnuCKClpUQf4jMHINSBx+XPgsyh918U0sfZsgOt4Vkz24RRrZx7XNS8mYT9Jz21zEhIVLXIm9EWI="
+      salt: "kjzGu25PW7kvZEvpXwPDFQ==",
+      iv: "GOqq6rfOvw2XKC0z",
+      data: "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"
     }
   }
 ];
@@ -64,46 +67,111 @@ async function decryptItems(enc, key) {
 }
 
 function itemRow(it) {
-  const name = `<span><span class="name">${it.name}</span> <span class="desc">— ${it.desc}</span></span>`;
-  if (it.status === "準備中") return `<li>${name}<span class="pending">準備中</span></li>`;
-  return `<li>${name}<a href="${it.url}" download>ダウンロード</a></li>`;
+  const li = document.createElement("li");
+  const heading = document.createElement("div");
+  heading.className = "item-heading";
+  const label = document.createElement("span");
+  const name = document.createElement("span");
+  name.className = "name";
+  name.textContent = it.name;
+  const desc = document.createElement("span");
+  desc.className = "desc";
+  desc.textContent = ` — ${it.desc}`;
+  label.append(name, desc);
+  heading.append(label);
+  li.append(heading);
+
+  if (it.status === "準備中") {
+    const status = document.createElement("span");
+    status.className = "pending";
+    status.textContent = "準備中";
+    heading.append(status);
+    return li;
+  }
+  if (typeof it.content === "string") {
+    const details = document.createElement("details");
+    const summary = document.createElement("summary");
+    summary.textContent = "内容を読む";
+    const body = document.createElement("div");
+    body.className = "content-body";
+    body.textContent = it.content;
+    details.append(summary, body);
+    li.append(details);
+    return li;
+  }
+  if (typeof it.url === "string") {
+    try {
+      const url = new URL(it.url, window.location.href);
+      if (url.protocol === "https:" || url.origin === window.location.origin) {
+        const link = document.createElement("a");
+        link.href = url.href;
+        link.download = "";
+        link.textContent = "ダウンロード";
+        heading.append(link);
+      }
+    } catch {
+      // Ignore malformed bonus links.
+    }
+  }
+  return li;
 }
 
 function render() {
-  document.getElementById("app").innerHTML = SKUS.map((s, i) => `
-    <section class="sku" id="sku-${i}">
-      <h2>${s.title}</h2><span class="slug">${s.id}</span>
-      <div class="gate">
-        <input type="text" placeholder="特典キーを入力" aria-label="特典キー">
-        <button type="button">解錠</button>
-      </div>
-      <p class="msg" hidden></p>
-      <ul class="items hidden"></ul>
-    </section>`).join("");
+  const app = document.getElementById("app");
+  app.replaceChildren();
 
   SKUS.forEach((s, i) => {
-    const sec = document.getElementById(`sku-${i}`);
-    const msg = sec.querySelector(".msg");
+    const card = document.createElement("section");
+    card.className = "sku";
+    card.id = `sku-${i}`;
+
+    const title = document.createElement("h2");
+    title.textContent = s.title;
+
+    const gate = document.createElement("div");
+    gate.className = "gate";
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "特典キーを入力";
+    input.setAttribute("aria-label", "特典キー");
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "解錠";
+    gate.append(input, button);
+
+    const message = document.createElement("p");
+    message.className = "msg";
+    message.hidden = true;
+    const list = document.createElement("ul");
+    list.className = "items hidden";
+
+    card.append(title, gate, message, list);
+    app.append(card);
+  });
+
+  SKUS.forEach((s, i) => {
+    const card = document.getElementById(`sku-${i}`);
+    const msg = card.querySelector(".msg");
     const act = async () => {
       let items;
       try {
-        items = await decryptItems(s.enc, sec.querySelector("input").value.trim());
+        items = await decryptItems(s.enc, card.querySelector("input").value.trim());
       } catch {
-        msg.textContent = "キーが違います。商品の添付「特典受取案内」をご確認ください。";
+        msg.textContent = "キーが違います。Brain記事の有料エリアにある受取案内をご確認ください。";
         msg.className = "msg";
         msg.hidden = false;
         return;
       }
-      const ul = sec.querySelector(".items");
-      ul.innerHTML = items.map(itemRow).join("");
+      const ul = card.querySelector(".items");
+      ul.replaceChildren(...items.map(itemRow));
       ul.classList.remove("hidden");
-      sec.querySelector(".gate").classList.add("hidden");
+      card.querySelector(".gate").classList.add("hidden");
       msg.textContent = "解錠しました。特典一覧を表示しています。";
       msg.className = "msg ok";
       msg.hidden = false;
     };
-    sec.querySelector("button").addEventListener("click", act);
-    sec.querySelector("input").addEventListener("keydown", (e) => { if (e.key === "Enter") act(); });
+    card.querySelector("button").addEventListener("click", act);
+    card.querySelector("input").addEventListener("keydown", (e) => { if (e.key === "Enter") act(); });
   });
 }
 render();
