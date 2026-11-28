@@ -1,16 +1,22 @@
 #!/usr/bin/env node
-// usage: node tools/encrypt.mjs <items.json> <key>
+// usage: node tools/encrypt.mjs <items.json> --key-stdin < <private-key-file>
 // Prints { salt, iv, data } (base64) to paste into SKUS[].enc in index.html.
 // The items JSON and the key must never be committed.
 import { webcrypto as crypto } from "node:crypto";
 import { readFileSync } from "node:fs";
 
-const [file, keyArg] = process.argv.slice(2);
-if (!file || !keyArg) {
-  console.error("usage: node tools/encrypt.mjs <items.json> <key|@key-file>");
+const [file, keyMode] = process.argv.slice(2);
+if (!file || keyMode !== "--key-stdin") {
+  console.error("usage: node tools/encrypt.mjs <items.json> --key-stdin < <private-key-file>");
   process.exit(1);
 }
-const key = keyArg.startsWith("@") ? readFileSync(keyArg.slice(1), "utf8").trim() : keyArg;
+const keyChunks = [];
+for await (const chunk of process.stdin) keyChunks.push(Buffer.from(chunk));
+const key = Buffer.concat(keyChunks).toString("utf8").trimEnd();
+if (!key) {
+  console.error("key input is empty");
+  process.exit(1);
+}
 
 const b64 = (buf) => Buffer.from(buf).toString("base64");
 const salt = crypto.getRandomValues(new Uint8Array(16));

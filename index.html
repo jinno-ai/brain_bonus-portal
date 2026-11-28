@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet">
 <title>購入者特典ポータル</title>
 <style>
 :root{color-scheme:light;--bg:#f7f5f2;--ink:#1a1a2e;--muted:#6b6258;--line:#eadfd4;--card:#fff;--accent:#ea580c;--accent2:#c2410c;--ok:#16794c;--err:#b4231f;--soft:#fff7ed}
@@ -39,11 +40,26 @@ async function deriveAes(encObj, key, usages) {
     base, {name:'AES-GCM', length:256}, false, usages);
 }
 async function decryptBytes(encObj, key) {
-  const aes = await deriveAes(encObj, key, ['decrypt']);
-  return crypto.subtle.decrypt({name:'AES-GCM', iv:b64(encObj.iv)}, aes, b64(encObj.data));
+  let lastError;
+  for (const variant of Array.isArray(encObj) ? encObj : [encObj]) {
+    try {
+      const aes = await deriveAes(variant, key, ['decrypt']);
+      return await crypto.subtle.decrypt({name:'AES-GCM', iv:b64(variant.iv)}, aes, b64(variant.data));
+    } catch (error) {
+      if (error.name !== 'OperationError') throw error;
+      lastError = error;
+    }
+  }
+  throw lastError || new Error('No encrypted content available');
 }
 async function decryptJson(encObj, key) {
   return JSON.parse(dec.decode(await decryptBytes(encObj, key)));
+}
+function safeUrl(raw) {
+  try {
+    const url = new URL(String(raw || ''), window.location.href);
+    return ['https:', 'mailto:'].includes(url.protocol) ? url.href : '#';
+  } catch { return '#'; }
 }
 function fragmentKey() {
   const raw = location.hash.slice(1);
@@ -96,14 +112,14 @@ function itemHtml(item, idx) {
          <div class="asset-viewer"></div>`
       : item.status === '準備中'
         ? `<div class="item-actions"><span class="small">準備中</span></div>`
-        : `<div class="item-actions"><a class="btn" href="${esc(item.url)}" target="_blank" rel="noopener">開く</a></div>`}
+        : `<div class="item-actions"><a class="btn" href="${esc(safeUrl(item.url))}" target="_blank" rel="noopener">開く</a></div>`}
   </article>`;
 }
 function blockHtml(kind, data) {
   if (!data) return '';
   const cls = kind === 'registration' ? 'member-box' : kind === 'review' ? 'review-box' : 'next-box';
   return `<div class="${cls}"><b>${esc(data.title || '')}</b><p>${esc(data.body || '')}</p>
-    ${data.url ? `<a class="btn secondary" href="${esc(data.url)}" target="_blank" rel="noopener">${esc(data.cta || '開く')}</a>` : ''}
+    ${data.url ? `<a class="btn secondary" href="${esc(safeUrl(data.url))}" target="_blank" rel="noopener">${esc(data.cta || '開く')}</a>` : ''}
     ${kind === 'registration' ? ' <button type="button" class="btn quiet confirm-member-inline">登録しました</button>' : ''}
   </div>`;
 }

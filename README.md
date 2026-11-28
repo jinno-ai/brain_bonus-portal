@@ -8,6 +8,7 @@
 
 - `skus.json` に商品ごとのセクションを持つ。特典一覧は **AES-256-GCM 暗号文**として埋め込み、source を見ても内容は読めない。大きなHTML特典は `assets/` 配下にも暗号文で置く。
 - キー → PBKDF2-SHA256（120,000回）→ AES 鍵を導出して復号。誤キーは GCM 認証タグで静かに拒否される。**リポに平文・ハッシュ・salt 以外の鍵材料は置かない**。
+- 購入者向けリンクは URL fragment（`#s=<sku>&k=<key>`）で自動復号できる。fragment は通常サーバーへ送信されない。
 - 特典一覧の平文（`items.*.json`）は `.gitignore` 済み。コミットしない。
 
 ## 運用
@@ -15,7 +16,7 @@
 ### 特典を追加・差し替える
 
 1. 平文一覧を編集（例: `items.012.json`。リポにコミットしない）。
-2. 暗号化: `node tools/encrypt.mjs items.012.json "<キー>"`（キーをshell履歴に残したくない場合は `@<key-file>` 指定）
+2. 暗号化: `node tools/encrypt.mjs items.012.json --key-stdin < /path/to/private-key-file`（キーをコマンド引数へ渡さない）
 3. 出力の `salt` / `iv` / `data` を `skus.json` の該当SKU `enc` に差し替える。HTMLファイルを暗号化する場合は `node tools/encrypt-file.mjs <input.html> <key-file> <output.enc.json>` を使い、出力を `assets/` に置いて `path` から参照する。pushで即時反映。
 4. 配布ファイル・URL は機密を含めない。**URL は推測不能なランダム path で発行**する（URL 自体が第二の鍵）。
 5. 購入者が復号後に URL を共有する可能性は always ある（サーバ認証でも同様）。特典は非機密素材に限定する。
@@ -23,7 +24,7 @@
 ### キーを交換する（漏洩時・定期）
 
 1. 新キーは推測不可能なランダム値（例: `openssl rand -hex 24`）。接頭辞などの形式パターンを作らない。
-2. 手順 2-3 と同様に全該当 SKU を再暗号化して push。
+2. 手順 2-3 と同様に全該当 SKU を再暗号化して push。移行中は `enc` を配列にし、現行暗号文を先・旧暗号文を後に置く。
 3. 案内資料側のキー記載を更新（キーの正本は私有リポのキー台帳）。
 
 ## 公開
