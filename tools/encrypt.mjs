@@ -5,11 +5,12 @@
 import { webcrypto as crypto } from "node:crypto";
 import { readFileSync } from "node:fs";
 
-const [file, key] = process.argv.slice(2);
-if (!file || !key) {
-  console.error("usage: node tools/encrypt.mjs <items.json> <key>");
+const [file, keyArg] = process.argv.slice(2);
+if (!file || !keyArg) {
+  console.error("usage: node tools/encrypt.mjs <items.json> <key|@key-file>");
   process.exit(1);
 }
+const key = keyArg.startsWith("@") ? readFileSync(keyArg.slice(1), "utf8").trim() : keyArg;
 
 const b64 = (buf) => Buffer.from(buf).toString("base64");
 const salt = crypto.getRandomValues(new Uint8Array(16));

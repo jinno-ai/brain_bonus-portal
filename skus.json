@@ -1,0 +1,35 @@
+[
+  {
+    "id": "012-hire-today",
+    "title": "SKU 012 hire-today",
+    "subtitle": "購入者向け特典",
+    "hidden": false,
+    "enc": {
+      "salt": "chrdguM9fpz8glKsRArchw==",
+      "iv": "oC22dkXLcFBwVQdX",
+      "data": "WabWnaea0qV9BxE4aShEugIQT4NEYy3nStTnBRUUeXhBg3h0zEoKyenu7UqLHtKoqt1qq6XUQBfJST0wyzYlYQLDhFVERKDXsNofVTm8nBRzGU2kTRpdxNx4zrGshkjOB4f5uywRIc1agacQy+azMPUhP8wwEwoH1qfXL072BLpYNOLcYCNq8JQ7pAaBn+cfmaiFonRtmVNVnuCKClpUQf4jMHINSBx+XPgsyh918U0sfZsgOt4Vkz24RRrZx7XNS8mYT9Jz21zEhIVLXIm9EWI="
+    }
+  },
+  {
+    "id": "p001-tsumi-tanaoroshi",
+    "title": "積み教材棚卸しキット",
+    "subtitle": "検証データビューアとステップアップ特典",
+    "hidden": false,
+    "enc": {
+      "salt": "G68fapOfyheG84K/3Rs6oA==",
+      "iv": "FtnZBifOHfTSJfAB",
+      "data": "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"
+    }
+  },
+  {
+    "id": "p001-review-rest",
+    "title": "積み教材棚卸しキット レビュー特典",
+    "subtitle": "完全版 rest",
+    "hidden": true,
+    "enc": {
+      "salt": "0i2OQc1lgwDiPGF5wPLRRA==",
+      "iv": "o5wAbvXeFcnq8INs",
+      "data": "e2FAm28KQuKKzcdRf21YmKny3STTyZjH4322QvVNX8AS6bBCp948yOSn9Y9KDs2hELA2l06e1MIlXSnB64rJi9qBZKw47UjIiLr0SWJjutVd2lJnqaG4t9lGlUoupoujfy7+hwb4YjynOYOS/1LxJm6XE+evktsx/xChM+Zp68q+eQJphF2HXffwii73kOll+lWRDiaF3o9KrST62RCLig/wEl8gJAfg1ercZsNcejM+HVnEGdoGb30h2EnBIoBZP94eXiOfd3nLpZsU+ygrcLg5qcVqjna9Vqa2gyrDOsNUNxrX3K2K175ERYM6p9jZxaCHpBnWmHNuuwqhIxjCEmRi0jfW4nPG6O/zi5Cue/UrM/9uqP2TcCuJ5xIbvrdUiCOH3b0pHNf+imBQ7t0dlmX0monmqeZVjl7v20HHIQiWsmh0l39oJXkRdYr9xU735Q9TMfWDBSBX/W5+eOvTCJbN4YNiLycN8TRCF0KZkxF/bnkvo3T3ncrKee6mvUfwtlbcW9/YhInxHB92+frE3n4i5RMlUzFpAlyzY9MKk0Mi7BF5wguy0WogzyyVaOmSxKHpIpRxGm4evGhQMoHo41zBg36n"
+    }
+  }
+]

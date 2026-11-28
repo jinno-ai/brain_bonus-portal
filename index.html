@@ -4,109 +4,195 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>購入者特典 | brain_bonus-portal</title>
+<title>購入者特典ポータル</title>
 <style>
-  :root { color-scheme: light dark; }
-  body { font-family: -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; margin: 0; background: #f6f7f9; color: #1c1e21; }
-  header { background: #fff; border-bottom: 1px solid #e2e4e8; padding: 24px 16px 16px; text-align: center; }
-  header h1 { font-size: 20px; margin: 0 0 8px; }
-  header p { font-size: 13px; color: #5a6068; margin: 0; }
-  main { max-width: 720px; margin: 24px auto; padding: 0 16px; }
-  section.sku { background: #fff; border: 1px solid #e2e4e8; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
-  section.sku h2 { font-size: 16px; margin: 0 0 4px; }
-  section.sku .slug { font-size: 12px; color: #8a9099; font-family: monospace; }
-  .gate { display: flex; gap: 8px; margin-top: 14px; }
-  .gate input { flex: 1; padding: 9px 12px; border: 1px solid #c8ccd2; border-radius: 8px; font-size: 14px; }
-  .gate button { padding: 9px 18px; border: 0; border-radius: 8px; background: #2563eb; color: #fff; font-size: 14px; cursor: pointer; }
-  .gate button:hover { background: #1d4fd8; }
-  .msg { font-size: 13px; margin-top: 8px; color: #b4231f; }
-  .msg.ok { color: #1a7f37; }
-  ul.items { margin: 14px 0 0; padding: 0; list-style: none; }
-  ul.items li { padding: 10px 12px; border-top: 1px solid #eef0f2; font-size: 14px; display: flex; justify-content: space-between; gap: 12px; }
-  ul.items li .name { font-weight: 600; }
-  ul.items li .desc { color: #5a6068; font-weight: 400; }
-  ul.items li a { color: #2563eb; text-decoration: none; white-space: nowrap; }
-  ul.items li a:hover { text-decoration: underline; }
-  .pending { color: #8a9099; font-size: 12px; white-space: nowrap; }
-  footer { text-align: center; font-size: 12px; color: #8a9099; padding: 16px; }
-  .hidden { display: none; }
+:root{color-scheme:light;--bg:#f7f5f2;--ink:#1a1a2e;--muted:#6b6258;--line:#eadfd4;--card:#fff;--accent:#ea580c;--accent2:#c2410c;--ok:#16794c;--err:#b4231f;--soft:#fff7ed}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;line-height:1.65}a{color:var(--accent2)}button,input{font:inherit}
+.hero{padding:34px 16px 22px;background:linear-gradient(145deg,#fff7ed,#fff 70%);border-bottom:1px solid var(--line)}
+.hero-inner{max-width:820px;margin:0 auto}.eyebrow{display:inline-block;background:#ffedd5;color:#9a3412;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700}.hero h1{font-size:28px;line-height:1.35;margin:12px 0 8px}.hero p{margin:0;color:var(--muted);font-size:15px}
+main{max-width:820px;margin:0 auto;padding:20px 16px 48px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 2px 12px #00000008}.sku-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}.sku-head h2{font-size:20px;line-height:1.4;margin:0}.slug{color:var(--muted);font-size:12px;margin-top:3px;word-break:break-all}.pill{flex:0 0 auto;border-radius:999px;background:#f1f5f9;color:#475569;padding:4px 9px;font-size:12px;font-weight:700}.lead{color:var(--muted);font-size:14px;margin:8px 0 0}
+.gate{margin-top:14px;display:flex;gap:8px}.gate input{min-width:0;flex:1;border:1px solid #d6c9bc;border-radius:12px;padding:11px 12px;background:#fff}.btn{border:0;border-radius:12px;background:var(--accent);color:#fff;padding:11px 15px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}.btn:hover{background:var(--accent2)}.btn.secondary{background:#fff;color:var(--accent2);border:1px solid #fdba74}.btn.quiet{background:#f5f5f4;color:#44403c;border:1px solid #e7e5e4}.btn:disabled{opacity:.55;cursor:wait}.msg{font-size:13px;margin:10px 0 0;color:var(--err)}.msg.ok{color:var(--ok)}
+.items{display:grid;gap:12px;margin-top:14px}.item{border:1px solid #eee2d8;border-radius:14px;padding:14px;background:#fffdf9}.item-top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}.item h3{font-size:16px;line-height:1.45;margin:0}.desc{color:var(--muted);font-size:13px;margin:5px 0 0}.tag{white-space:nowrap;border-radius:999px;background:#eef2ff;color:#4338ca;padding:3px 8px;font-size:11px;font-weight:700}.item-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.member-box,.review-box,.next-box,.note-box{border-radius:14px;padding:13px;margin-top:12px;font-size:14px}.member-box{background:#eef2ff;border:1px solid #c7d2fe}.review-box{background:#f0fdf4;border:1px solid #bbf7d0}.next-box{background:#fff7ed;border:1px solid #fed7aa}.note-box{background:#fafaf9;border:1px solid #e7e5e4;color:var(--muted)}.confirm{margin-top:10px;padding-top:10px;border-top:1px dashed #c7d2fe}.asset-viewer{margin-top:12px}.asset-viewer iframe{display:block;width:100%;height:72vh;border:1px solid var(--line);border-radius:12px;background:#fff}.viewerbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;font-size:13px}.small{font-size:12px;color:var(--muted)}.loading{padding:28px;text-align:center;color:var(--muted)}footer{padding:20px 16px 32px;text-align:center;color:var(--muted);font-size:12px}.hidden{display:none!important}
+@media(max-width:560px){.hero h1{font-size:24px}.gate{flex-direction:column}.gate .btn{width:100%}.sku-head,.item-top{display:block}.pill,.tag{display:inline-block;margin-top:8px}.item-actions .btn{width:100%;text-align:center}.card{padding:15px;border-radius:15px}}
 </style>
 </head>
 <body>
-<header>
-  <h1>購入者特典</h1>
-  <p>Brainでご購入いただいた商品の特典を受け取れるページです。キーは商品に添付の「特典受取案内」に記載されています。</p>
-</header>
-<main id="app"></main>
-<footer>本ページは Brain 販売商品の購入者向け特典配布用です。特典は購入者ご本人の利用に限ります（再配布・転載不可）。キーがわからない場合はお買い上げ商品の添付ファイルをご確認ください。</footer>
+<header class="hero"><div class="hero-inner">
+<span class="eyebrow">購入者限定</span>
+<h1>特典の受け取りは、リンクを開くだけです</h1>
+<p>購入時の案内リンクから開くと、鍵の入力なしで特典が表示されます。直接開いた場合だけ、商品ごとの特典キーを入力してください。</p>
+</div></header>
+<main id="app"><div class="loading">読み込み中…</div></main>
+<footer>特典は購入者ご本人の利用に限ります。再配布・転載はご遠慮ください。鍵が分からない場合は、購入した商品ページの購入者向け案内をご確認ください。</footer>
 <script>
-const SKUS = [
-  {
-    id: "012-hire-today",
-    title: "SKU 012 hire-today",
-    enc: {
-      salt: "chrdguM9fpz8glKsRArchw==",
-      iv: "oC22dkXLcFBwVQdX",
-      data: "WabWnaea0qV9BxE4aShEugIQT4NEYy3nStTnBRUUeXhBg3h0zEoKyenu7UqLHtKoqt1qq6XUQBfJST0wyzYlYQLDhFVERKDXsNofVTm8nBRzGU2kTRpdxNx4zrGshkjOB4f5uywRIc1agacQy+azMPUhP8wwEwoH1qfXL072BLpYNOLcYCNq8JQ7pAaBn+cfmaiFonRtmVNVnuCKClpUQf4jMHINSBx+XPgsyh918U0sfZsgOt4Vkz24RRrZx7XNS8mYT9Jz21zEhIVLXIm9EWI="
-    }
-  }
-];
+const app = document.getElementById('app');
+const enc = new TextEncoder();
+const dec = new TextDecoder();
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+let skus = [];
 
-async function decryptItems(enc, key) {
-  const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
-  const base = await crypto.subtle.importKey(
-    "raw", new TextEncoder().encode(key), "PBKDF2", false, ["deriveKey"]);
-  const aes = await crypto.subtle.deriveKey(
-    { name: "PBKDF2", salt: b64(enc.salt), iterations: 120000, hash: "SHA-256" },
-    base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
-  const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(enc.iv) }, aes, b64(enc.data));
-  return JSON.parse(new TextDecoder().decode(plain));
+async function deriveAes(encObj, key, usages) {
+  const base = await crypto.subtle.importKey('raw', enc.encode(key), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    {name:'PBKDF2', salt:b64(encObj.salt), iterations:120000, hash:'SHA-256'},
+    base, {name:'AES-GCM', length:256}, false, usages);
 }
-
-function itemRow(it) {
-  const name = `<span><span class="name">${it.name}</span> <span class="desc">— ${it.desc}</span></span>`;
-  if (it.status === "準備中") return `<li>${name}<span class="pending">準備中</span></li>`;
-  return `<li>${name}<a href="${it.url}" download>ダウンロード</a></li>`;
+async function decryptBytes(encObj, key) {
+  const aes = await deriveAes(encObj, key, ['decrypt']);
+  return crypto.subtle.decrypt({name:'AES-GCM', iv:b64(encObj.iv)}, aes, b64(encObj.data));
 }
-
-function render() {
-  document.getElementById("app").innerHTML = SKUS.map((s, i) => `
-    <section class="sku" id="sku-${i}">
-      <h2>${s.title}</h2><span class="slug">${s.id}</span>
-      <div class="gate">
-        <input type="text" placeholder="特典キーを入力" aria-label="特典キー">
-        <button type="button">解錠</button>
-      </div>
-      <p class="msg" hidden></p>
-      <ul class="items hidden"></ul>
-    </section>`).join("");
-
-  SKUS.forEach((s, i) => {
-    const sec = document.getElementById(`sku-${i}`);
-    const msg = sec.querySelector(".msg");
-    const act = async () => {
-      let items;
-      try {
-        items = await decryptItems(s.enc, sec.querySelector("input").value.trim());
-      } catch {
-        msg.textContent = "キーが違います。商品の添付「特典受取案内」をご確認ください。";
-        msg.className = "msg";
-        msg.hidden = false;
-        return;
-      }
-      const ul = sec.querySelector(".items");
-      ul.innerHTML = items.map(itemRow).join("");
-      ul.classList.remove("hidden");
-      sec.querySelector(".gate").classList.add("hidden");
-      msg.textContent = "解錠しました。特典一覧を表示しています。";
-      msg.className = "msg ok";
-      msg.hidden = false;
-    };
-    sec.querySelector("button").addEventListener("click", act);
-    sec.querySelector("input").addEventListener("keydown", (e) => { if (e.key === "Enter") act(); });
+async function decryptJson(encObj, key) {
+  return JSON.parse(dec.decode(await decryptBytes(encObj, key)));
+}
+function fragmentKey() {
+  const raw = location.hash.slice(1);
+  if (!raw) return {};
+  const params = new URLSearchParams(raw);
+  if (params.get('k')) return {sku:params.get('s') || params.get('sku'), key:params.get('k')};
+  const m = raw.match(/^([^/]+)\/(.+)$/);
+  if (m) return {sku:decodeURIComponent(m[1]), key:decodeURIComponent(m[2])};
+  return {key:decodeURIComponent(raw)};
+}
+function isMemberConfirmed() { return localStorage.getItem('memberConfirmed') === '1'; }
+function setMemberConfirmed() { localStorage.setItem('memberConfirmed', '1'); }
+function contentParts(content) {
+  if (Array.isArray(content)) return {items:content, legacy:true};
+  return {...content, items:content.items || [], legacy:false};
+}
+function renderHome(message) {
+  const visible = skus.filter((s) => !s.hidden);
+  app.innerHTML = (message ? `<div class="card"><p class="msg">${esc(message)}</p></div>` : '') + visible.map((s, i) => `
+    <section class="card sku" data-sku="${esc(s.id)}">
+      <div class="sku-head"><div><h2>${esc(s.title)}</h2><div class="slug">${esc(s.id)}</div></div><span class="pill">特典あり</span></div>
+      <p class="lead">${esc(s.subtitle || '購入者向けの特典を受け取れます。')}</p>
+      <div class="gate"><input type="password" inputmode="text" autocomplete="off" placeholder="特典キーを入力" aria-label="特典キー"><button class="btn" type="button">特典を開く</button></div>
+      <p class="msg" hidden></p><div class="unlocked"></div>
+    </section>`).join('');
+  document.querySelectorAll('.sku').forEach((sec) => {
+    const sku = skus.find((x) => x.id === sec.dataset.sku);
+    const input = sec.querySelector('input');
+    const run = () => unlock(sku, input.value.trim(), false);
+    sec.querySelector('button').addEventListener('click', run);
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') run(); });
   });
 }
-render();
+function renderSelected(sku) {
+  app.innerHTML = `<section class="card sku" data-sku="${esc(sku.id)}">
+    <div class="sku-head"><div><h2>${esc(sku.title)}</h2><div class="slug">${esc(sku.id)}</div></div><span class="pill">リンク確認済み</span></div>
+    <p class="lead">リンクから特典キーを読み取りました。復号しています…</p>
+    <p class="msg" hidden></p><div class="unlocked"></div>
+  </section>`;
+  return document.querySelector('.sku');
+}
+function itemHtml(item, idx) {
+  const locked = item.memberLocked && !isMemberConfirmed();
+  const typeTag = item.type === 'encrypted-html' ? (locked ? '任意登録者向け' : 'ブラウザで開く') : '特典';
+  return `<article class="item" data-idx="${idx}">
+    <div class="item-top"><div><h3>${esc(item.name)}</h3><p class="desc">${esc(item.desc || '')}</p></div><span class="tag">${esc(typeTag)}</span></div>
+    ${item.type === 'encrypted-html'
+      ? `<div class="item-actions"><button type="button" class="btn asset-open">${locked ? '登録を確認して開く' : esc(item.cta || '開く')}</button></div>
+         ${locked ? `<div class="confirm hidden">任意登録が済んでいる方向けの追加ガイドです。まだの方は下の「任意登録」から無料登録できます。<br><button type="button" class="btn secondary confirm-member">登録済みなので開く</button></div>` : ''}
+         <div class="asset-viewer"></div>`
+      : item.status === '準備中'
+        ? `<div class="item-actions"><span class="small">準備中</span></div>`
+        : `<div class="item-actions"><a class="btn" href="${esc(item.url)}" target="_blank" rel="noopener">開く</a></div>`}
+  </article>`;
+}
+function blockHtml(kind, data) {
+  if (!data) return '';
+  const cls = kind === 'registration' ? 'member-box' : kind === 'review' ? 'review-box' : 'next-box';
+  return `<div class="${cls}"><b>${esc(data.title || '')}</b><p>${esc(data.body || '')}</p>
+    ${data.url ? `<a class="btn secondary" href="${esc(data.url)}" target="_blank" rel="noopener">${esc(data.cta || '開く')}</a>` : ''}
+    ${kind === 'registration' ? ' <button type="button" class="btn quiet confirm-member-inline">登録しました</button>' : ''}
+  </div>`;
+}
+function renderContent(sec, sku, content, key) {
+  const c = contentParts(content);
+  const unlocked = sec.querySelector('.unlocked');
+  const gate = sec.querySelector('.gate');
+  const msg = sec.querySelector('.msg');
+  if (gate) gate.classList.add('hidden');
+  msg.textContent = '特典を表示しています。';
+  msg.className = 'msg ok';
+  msg.hidden = false;
+  unlocked.innerHTML = `
+    ${c.lead ? `<p class="lead">${esc(c.lead)}</p>` : ''}
+    ${c.notice ? `<div class="note-box">${esc(c.notice)}</div>` : ''}
+    <div class="items">${c.items.map(itemHtml).join('')}</div>
+    ${blockHtml('registration', c.registration)}
+    ${blockHtml('review', c.review)}
+    ${blockHtml('next', c.next)}
+    ${c.legacy ? '' : '<p class="small">各特典はこのブラウザ内で復号して表示します。キーはサーバーへ送信されません。</p>'}`;
+  unlocked.querySelectorAll('.asset-open').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const itemEl = btn.closest('.item');
+      const item = c.items[+itemEl.dataset.idx];
+      if (item.memberLocked && !isMemberConfirmed()) {
+        itemEl.querySelector('.confirm')?.classList.toggle('hidden');
+        return;
+      }
+      await openAsset(itemEl, item, key);
+    });
+  });
+  unlocked.querySelectorAll('.confirm-member,.confirm-member-inline').forEach((btn) => {
+    btn.addEventListener('click', () => { setMemberConfirmed(); renderContent(sec, sku, content, key); });
+  });
+}
+async function openAsset(itemEl, item, key) {
+  const btn = itemEl.querySelector('.asset-open');
+  const host = itemEl.querySelector('.asset-viewer');
+  btn.disabled = true;
+  btn.textContent = '復号しています…';
+  try {
+    const res = await fetch(item.path, {cache:'no-store'});
+    if (!res.ok) throw new Error('asset fetch failed');
+    const encObj = await res.json();
+    const plain = await decryptBytes(encObj, key);
+    const blob = new Blob([plain], {type:'text/html;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    host.innerHTML = `<div class="viewerbar"><a href="${url}" target="_blank" rel="noopener">大きく開く</a><button type="button" class="btn quiet close-viewer">閉じる</button></div><iframe title="${esc(item.name)}" src="${url}"></iframe>`;
+    host.querySelector('.close-viewer').addEventListener('click', () => { host.innerHTML = ''; });
+    btn.textContent = '開きました';
+  } catch (e) {
+    btn.textContent = 'もう一度試す';
+    host.innerHTML = '<p class="msg">特典を開けませんでした。通信状態を確認して、もう一度お試しください。</p>';
+  } finally {
+    btn.disabled = false;
+  }
+}
+async function unlock(sku, key, auto) {
+  if (!key) return;
+  const sec = auto ? renderSelected(sku) : document.querySelector(`.sku[data-sku="${CSS.escape(sku.id)}"]`);
+  const msg = sec.querySelector('.msg');
+  msg.hidden = true;
+  try {
+    const content = await decryptJson(sku.enc, key);
+    renderContent(sec, sku, content, key);
+    sec.scrollIntoView({behavior:'smooth', block:'start'});
+  } catch {
+    msg.textContent = auto ? 'リンクの鍵で開けませんでした。購入者向け案内のリンクから開き直してください。' : 'キーが違います。購入者向け案内をご確認ください。';
+    msg.className = 'msg';
+    msg.hidden = false;
+  }
+}
+async function init() {
+  try {
+    const res = await fetch('skus.json', {cache:'no-store'});
+    skus = await res.json();
+  } catch {
+    app.innerHTML = '<div class="card"><p class="msg">特典情報を読み込めませんでした。時間をおいて開き直してください。</p></div>';
+    return;
+  }
+  const frag = fragmentKey();
+  if (frag.key) {
+    const sku = skus.find((s) => s.id === frag.sku) || (frag.sku ? null : skus.find((s) => !s.hidden));
+    if (sku) { unlock(sku, frag.key, true); return; }
+  }
+  renderHome();
+}
+window.addEventListener('hashchange', init);
+init();
 </script>
 </body>
 </html>
